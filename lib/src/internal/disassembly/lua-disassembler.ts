@@ -1,6 +1,7 @@
 import { Disassembly } from "../../../types/disassembly-token";
+import { CursorPosition } from "./cursor-position";
 
 /** @internal */
 export interface LuaDisassembler {
-    disassemble(rawFile: Buffer): Disassembly;
+    disassemble(): Disassembly;
 }

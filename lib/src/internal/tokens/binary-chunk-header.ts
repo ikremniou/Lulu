@@ -1,4 +1,15 @@
-import { DisassemblyToken } from "../../../types/disassembly-token";
+import { DisassemblyToken } from '../../../types/disassembly-token';
+import {
+    BinaryChunkHeaderEndianness,
+    BinaryChunkHeaderFormat,
+    BinaryChunkHeaderIntegralFlag,
+    BinaryChunkHeaderSignature,
+    BinaryChunkHeaderSizeOfInstruction,
+    BinaryChunkHeaderSizeOfInt,
+    BinaryChunkHeaderSizeOfLuaNumber,
+    BinaryChunkHeaderSizeOfSizeT,
+    BinaryChunkHeaderVersion,
+} from '../disassembly/enum/header';
 
 enum BinaryOffsets {
     Signature = 0,
@@ -10,45 +21,7 @@ enum BinaryOffsets {
     SizeOfInstruction = 9,
     SizeOfLuaNumber = 10,
     InternalFlag = 11,
-    Header = 12
-}
-
-export enum BinaryChunkHeaderSignature {
-    Lua = 0x1B4C7561
-}
-
-export enum BinaryChunkHeaderVersion {
-    Lua51 = 0x51
-}
-
-export enum BinaryChunkHeaderFormat {
-    Official = 0
-}
-
-export enum BinaryChunkHeaderEndianness {
-    BigEndian = 0,
-    LittleEndian = 1
-}
-
-export enum BinaryChunkHeaderSizeOfInt {
-    Default = 4
-}
-
-export enum BinaryChunkHeaderSizeOfSizeT {
-    Default = 4
-}
-
-export enum BinaryChunkHeaderSizeOfInstruction {
-    Default = 4
-}
-
-export enum BinaryChunkHeaderSizeOfLuaNumber {
-    Default = 8
-}
-
-export enum BinaryChunkHeaderIntegralFlag {
-    FloatingPoint = 0,
-    IntegralNumber = 1
+    Header = 12,
 }
 
 export class BinaryChunkHeader implements DisassemblyToken {
@@ -68,7 +41,7 @@ export class BinaryChunkHeader implements DisassemblyToken {
         this.signature = rawFile.readInt32BE(BinaryOffsets.Signature);
         if (this.signature !== BinaryChunkHeaderSignature.Lua)
             throw new Error(`Invalid header Signature: ${this.signature}`);
-        
+
         this.version = rawFile.readInt8(BinaryOffsets.Version);
         if (this.version !== BinaryChunkHeaderVersion.Lua51)
             throw new Error(`Not supported Lua version: ${this.version}`);
@@ -78,8 +51,10 @@ export class BinaryChunkHeader implements DisassemblyToken {
             throw new Error(`Unsupported Format version: ${this.format}`);
 
         this.endianness = rawFile.readInt8(BinaryOffsets.Endianness);
-        if (this.endianness !== BinaryChunkHeaderEndianness.BigEndian && 
-            this.endianness !== BinaryChunkHeaderEndianness.LittleEndian)
+        if (
+            this.endianness !== BinaryChunkHeaderEndianness.BigEndian &&
+            this.endianness !== BinaryChunkHeaderEndianness.LittleEndian
+        )
             throw new Error(`Unsupported Endianness: ${this.endianness}`);
 
         this.sizeOfInt = rawFile.readInt8(BinaryOffsets.SizeOfInt);
@@ -99,8 +74,10 @@ export class BinaryChunkHeader implements DisassemblyToken {
             throw new Error(`Unsupported Lua number: ${this.sizeOfLuaNumber}`);
 
         this.integralFlag = rawFile.readUInt32LE(BinaryOffsets.InternalFlag);
-        if (this.integralFlag !== BinaryChunkHeaderIntegralFlag.FloatingPoint && 
-            this.integralFlag !== BinaryChunkHeaderIntegralFlag.IntegralNumber) 
+        if (
+            this.integralFlag !== BinaryChunkHeaderIntegralFlag.FloatingPoint &&
+            this.integralFlag !== BinaryChunkHeaderIntegralFlag.IntegralNumber
+        )
             throw new Error(`Unsupported Integral: ${this.integralFlag}`);
     }
 
@@ -117,6 +94,6 @@ export class BinaryChunkHeader implements DisassemblyToken {
     }
 
     public toString(): string {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 }

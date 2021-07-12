@@ -5,5 +5,5 @@ const disassemblerFactory: DisassemblerFactory = new DisassemblerFactoryImpl();
 
 export function disassemblyFromBuffer(rawFile: Buffer) {
     const disassembler = disassemblerFactory.createDisassembler(rawFile); 
-    disassembler.disassemble(rawFile);
+    disassembler.disassemble();
 }
