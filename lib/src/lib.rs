@@ -1,5 +1,5 @@
 mod reader;
-mod types;
+pub mod types;
 
 use crate::reader::{read_function, read_header};
 use bytes::Bytes;
@@ -11,7 +11,6 @@ pub struct Disassembly {
 }
 
 pub fn disassemble(raw_buffer: Vec<u8>) -> Disassembly {
-    println!("{:x?}", raw_buffer);
     let mut buffer = Bytes::from(raw_buffer);
     let header = read_header(&mut buffer).unwrap();
     let function: LuaFunction = read_function(&mut buffer, &header).unwrap();
