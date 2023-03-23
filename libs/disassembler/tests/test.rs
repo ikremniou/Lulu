@@ -8,7 +8,7 @@ fn it_should_disassemble_hello_world_sample_with_debug_data() {
         .unwrap()
         .join("tests")
         .join("compiled")
-        .join("hello_world.lu");
+        .join("hello_world.luc");
 
     let file = fs::read(compiled_dir).unwrap();
     let dis = disassemble(file);
@@ -27,7 +27,7 @@ fn it_should_disassemble_hello_world_sample_without_debug_data() {
         .unwrap()
         .join("tests")
         .join("compiled")
-        .join("hello_world.lus");
+        .join("hello_world.lu");
 
     let file = fs::read(compiled_dir).unwrap();
     let dis = disassemble(file);

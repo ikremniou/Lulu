@@ -1,0 +1,39 @@
+{
+  "name": "@lulu/disassembler",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/disassembler",
+        "command": "cargo build"
+      },
+      "inputs": [
+        "{projectRoot}/src/**"
+      ],
+      "outputs": [
+        "{projectRoot}/target/**"
+      ]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/disassembler",
+        "command": "cargo test"
+      },
+      "dependsOn": [
+        "build-test"
+      ]
+    },
+    "build-test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/disassembler",
+        "commands": [
+          "luac -o ./tests/compiled/hello_world.luc ./tests/assets/hello_world.lua",
+          "luac -s -o ./tests/compiled/hello_world.lu ./tests/assets/hello_world.lua"
+        ],
+        "parallel": false
+      }
+    }
+  }
+}
