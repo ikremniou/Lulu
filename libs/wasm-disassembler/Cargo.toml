@@ -1,0 +1,15 @@
+[package]
+description = "The disassembler for Lua. Accepts bytes and returns assembly tokens"
+name = "disassembler"
+version = "0.1.0"
+edition = "2021"
+repository = ""
+authors = ["Ilya Kremniou <i@kremniou.ru>"]
+
+[lib]
+name = "lulu"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+lulu-disassembler = { path = "../disassembler" }
+wasm-bindgen = "0.2.84"

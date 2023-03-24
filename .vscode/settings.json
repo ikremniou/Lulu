@@ -1,5 +1,9 @@
 {
     "rust-analyzer.linkedProjects": [
-        "libs/disassembler/Cargo.toml"
+        "libs/disassembler/Cargo.toml",
+        "libs/wasm-disassembler/Cargo.toml"
+    ],
+    "cSpell.words": [
+        "bindgen"
     ]
 }
