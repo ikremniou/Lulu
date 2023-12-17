@@ -1,6 +1,6 @@
 use std::{env, path::PathBuf, fs};
 
-use lulu::disassemble;
+use lulu_lib::disassemble;
 
 #[test]
 fn it_should_disassemble_hello_world_sample_with_debug_data() {

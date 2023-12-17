@@ -1,0 +1,3 @@
+[workspace]
+members = ["packages/lib", "packages/lib-web"]
+resolver = "2"
