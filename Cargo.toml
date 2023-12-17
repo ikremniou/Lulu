@@ -1,3 +1,3 @@
 [workspace]
-members = ["packages/lib", "packages/lib-web"]
+members = ["packages/lib", "packages/lib-web", "packages/gui"]
 resolver = "2"
