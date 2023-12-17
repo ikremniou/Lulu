@@ -1,3 +1,0 @@
-[submodule "extern/lua5.1"]
-	path = extern/lua5.1
-	url = https://github.com/rangercyh/lua5.1.git
