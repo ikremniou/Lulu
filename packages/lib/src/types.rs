@@ -33,6 +33,7 @@ pub enum LuaInteger {
 
 pub enum LuaSizeT {
     U32(u32),
+    U64(u64),
 }
 
 pub type LuaString = String;

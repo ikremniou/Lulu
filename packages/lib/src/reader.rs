@@ -165,6 +165,7 @@ pub fn read_header(buffer: &mut Bytes) -> Result<AssemblyHeader, String> {
 
     let size_t_size = match buffer.get_u8() {
         0x04 => 0x04,
+        0x08 => 0x08,
         x => return Err(format!("Header size of size_t is not supported: {:x?}", x)),
     };
 
@@ -221,6 +222,8 @@ pub fn read_size_t(buf: &mut Bytes, header: &AssemblyHeader) -> Result<LuaSizeT,
     match (header.size_t_size, &header.endian) {
         (0x04, LuaEndian::LittleEndian) => Ok(LuaSizeT::U32(buf.get_u32_le())),
         (0x04, LuaEndian::BigEndian) => Ok(LuaSizeT::U32(buf.get_u32())),
+        (0x08, LuaEndian::LittleEndian) => Ok(LuaSizeT::U64(buf.get_u64_le())),
+        (0x08, LuaEndian::BigEndian) => Ok(LuaSizeT::U64(buf.get_u64())),
         _ => Err("Cannot read size_t".to_owned()),
     }
 }
@@ -229,6 +232,7 @@ pub fn read_string(buf: &mut Bytes, header: &AssemblyHeader) -> Result<Option<Lu
     let str_size = read_size_t(buf, header)?;
     let size: usize = match str_size {
         LuaSizeT::U32(x) => x as usize,
+        LuaSizeT::U64(x) => x as usize,
     };
 
     if size == 0 {
