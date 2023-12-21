@@ -33,7 +33,7 @@ fn it_should_disassemble_hello_world_sample_with_debug_data() {
         .join("assets")
         .join("hello_world.lua");
     let file = compile_lua(test_file, false);
-    let dis = disassemble(file);
+    let dis = disassemble(file).unwrap();
 
     assert_eq!(dis.function.instructions.len(), 4);
     assert_eq!(dis.function.constants.len(), 2);
@@ -52,7 +52,7 @@ fn it_should_disassemble_hello_world_sample_without_debug_data() {
         .join("hello_world.lua");
 
     let file = compile_lua(test_file, true);
-    let dis = disassemble(file);
+    let dis = disassemble(file).unwrap();
 
     assert_eq!(dis.function.instructions.len(), 4);
     assert_eq!(dis.function.constants.len(), 2);

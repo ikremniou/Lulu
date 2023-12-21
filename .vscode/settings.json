@@ -2,6 +2,21 @@
     "cSpell.words": [
         "bindgen",
         "eframe",
-        "egui"
+        "egui",
+        "FORLOOP",
+        "FORPREP",
+        "GETGLOBAL",
+        "GETUPVAL",
+        "LOADBOOL",
+        "LOADK",
+        "LOADNIL",
+        "NEWTABLE",
+        "SETGLOBAL",
+        "SETLIST",
+        "SETUPVAL",
+        "TAILCALL",
+        "TESTSET",
+        "TFORLOOP",
+        "VARARG"
     ]
 }

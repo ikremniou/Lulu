@@ -1,8 +1,9 @@
-mod reader;
+mod readers;
+mod error;
 pub mod types;
 
-use crate::reader::{read_function, read_header};
 use bytes::Bytes;
+use readers::{header::read_header, function::FunctionReader, Reader};
 use types::{AssemblyHeader, LuaFunction};
 
 pub struct Disassembly {
@@ -10,9 +11,9 @@ pub struct Disassembly {
     pub function: LuaFunction,
 }
 
-pub fn disassemble(raw_buffer: Vec<u8>) -> Disassembly {
+pub fn disassemble(raw_buffer: Vec<u8>) -> Result<Disassembly, error::LuluError> {
     let mut buffer = Bytes::from(raw_buffer);
     let header = read_header(&mut buffer).unwrap();
-    let function: LuaFunction = read_function(&mut buffer, &header).unwrap();
-    return Disassembly { header, function };
+    let function: LuaFunction = FunctionReader::read(&mut buffer, &header)?;
+    return Ok(Disassembly { header, function });
 }
