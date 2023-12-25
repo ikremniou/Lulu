@@ -38,7 +38,10 @@ pub fn read_string(buf: &mut Bytes, header: &AssemblyHeader) -> Result<Option<Lu
         return Ok(None);
     }
 
-    let string_bytes = buf.get(0..size - 1).unwrap();
+    let string_bytes = match buf.get(0..size - 1) {
+        Some(x) => x,
+        None => return Err("Cannot read Lua string. Position out of bounds".to_owned()),
+    };
     let string = String::from_utf8_lossy(string_bytes).to_string();
 
     buf.advance(size);

@@ -12,8 +12,8 @@ pub fn read_header(buffer: &mut Bytes) -> Result<AssemblyHeader, String> {
     if signature != b"\x1BLua" {
         return Err(format!("Header signature is not valid: {:x?}", signature));
     }
-
     buffer.advance(4);
+
     let version = match buffer.get_u8() {
         0x51 => LuaVersion::Lua51,
         x => return Err(format!("Header version is not valid: {:x?}", x)),
