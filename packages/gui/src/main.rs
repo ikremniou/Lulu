@@ -1,50 +1,60 @@
 use eframe::egui;
+use egui_dock::{DockArea, DockState, NodeIndex, Style};
+mod menu;
 
 fn main() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default().with_inner_size([1280.0, 720.0]),
         ..Default::default()
     };
-    eframe::run_native("Lulu GUI", options, Box::new(|_| Box::<MyApp>::default()))
+    eframe::run_native(
+        "Lulu Disassembler",
+        options,
+        Box::new(|_| Box::<MyApp>::default()),
+    )
 }
 
 struct MyApp {
-    pub text: String,
+    tree: DockState<String>,
+}
+
+struct TabViewer;
+impl egui_dock::TabViewer for TabViewer {
+    type Tab = String;
+
+    fn title(&mut self, tab: &mut Self::Tab) -> egui::WidgetText {
+        (&*tab).into()
+    }
+
+    fn ui(&mut self, ui: &mut egui::Ui, tab: &mut Self::Tab) {
+        ui.label(format!("Content of {tab}"));
+    }
 }
 
 impl Default for MyApp {
     fn default() -> Self {
-        Self {
-            text: "Hello World!".to_owned(),
-        }
+        let mut tree = DockState::new(vec!["tab1".to_owned(), "tab2".to_owned()]);
+
+        let [a, b] =
+            tree.main_surface_mut()
+                .split_left(NodeIndex::root(), 0.3, vec!["tab3".to_owned()]);
+        let [_, _] = tree
+            .main_surface_mut()
+            .split_below(a, 0.7, vec!["tab4".to_owned()]);
+        let [_, _] = tree
+            .main_surface_mut()
+            .split_below(b, 0.5, vec!["tab5".to_owned()]);
+
+        Self { tree }
     }
 }
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let Self { text } = self;
+        menu::display_menu(ctx);
 
-        egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
-            egui::menu::bar(ui, |ui| {
-                ui.menu_button("File", |ui| {
-                    if ui.button("Open").clicked() {}
-                    if ui.button("Save").clicked() {}
-                    if ui.button("Exit").clicked() {
-                        ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
-                    }
-                });
-                ui.menu_button("Help", |ui| if ui.button("About").clicked() {})
-            });
-        });
-
-        egui::CentralPanel::default().show(ctx, |ui| {
-            egui::TextEdit::multiline(text)
-                .desired_rows(10)
-                .font(egui::TextStyle::Monospace)
-                .code_editor()
-                .desired_width(f32::INFINITY)
-                .lock_focus(true)
-                .show(ui);
-        });
+        DockArea::new(&mut self.tree)
+            .style(Style::from_egui(ctx.style().as_ref()))
+            .show(ctx, &mut TabViewer {})
     }
 }
