@@ -1,5 +1,5 @@
 use eframe::egui;
-use egui_dock::{DockArea, DockState, NodeIndex, Style};
+use egui_dock::{DockArea, DockState, Style};
 mod menu;
 
 fn main() -> Result<(), eframe::Error> {
@@ -15,46 +15,57 @@ fn main() -> Result<(), eframe::Error> {
 }
 
 struct MyApp {
+    context: AppContext,
     tree: DockState<String>,
 }
 
-struct TabViewer;
-impl egui_dock::TabViewer for TabViewer {
+struct AppContext {
+    name: String,
+    buffers: Vec<String>,
+}
+
+impl egui_dock::TabViewer for AppContext {
     type Tab = String;
 
     fn title(&mut self, tab: &mut Self::Tab) -> egui::WidgetText {
         (&*tab).into()
     }
 
-    fn ui(&mut self, ui: &mut egui::Ui, tab: &mut Self::Tab) {
-        ui.label(format!("Content of {tab}"));
+    fn ui(&mut self, ui: &mut egui::Ui, _tab: &mut Self::Tab) {
+        self.main_ui(ui);
+    }
+}
+
+impl AppContext {
+    fn main_ui(&mut self, ui: &mut egui::Ui) {
+        ui.label("Hello World! I'm ".to_owned() + &self.name);
+        if self.buffers.len() > 0 {
+            ui.label("I have ".to_owned() + &self.buffers.len().to_string() + " buffers");
+        }
     }
 }
 
 impl Default for MyApp {
     fn default() -> Self {
-        let mut tree = DockState::new(vec!["tab1".to_owned(), "tab2".to_owned()]);
+        let tree = DockState::new(vec!["Listing: file.luac".to_owned()]);
+        let app_context = AppContext {
+            name: "Ilya".to_owned(),
+            buffers: vec![],
+        };
 
-        let [a, b] =
-            tree.main_surface_mut()
-                .split_left(NodeIndex::root(), 0.3, vec!["tab3".to_owned()]);
-        let [_, _] = tree
-            .main_surface_mut()
-            .split_below(a, 0.7, vec!["tab4".to_owned()]);
-        let [_, _] = tree
-            .main_surface_mut()
-            .split_below(b, 0.5, vec!["tab5".to_owned()]);
-
-        Self { tree }
+        Self {
+            tree,
+            context: app_context,
+        }
     }
 }
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        menu::display_menu(ctx);
+        menu::display_menu(&mut self.context, ctx);
 
         DockArea::new(&mut self.tree)
             .style(Style::from_egui(ctx.style().as_ref()))
-            .show(ctx, &mut TabViewer {})
+            .show(ctx, &mut self.context)
     }
 }
