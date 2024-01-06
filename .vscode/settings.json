@@ -18,5 +18,9 @@
         "TESTSET",
         "TFORLOOP",
         "VARARG"
-    ]
+    ],
+    "rust-analyzer.linkedProjects": [
+        ".\\packages\\gui\\Cargo.toml"
+    ],
+    "rust-analyzer.showUnlinkedFileNotification": false
 }
