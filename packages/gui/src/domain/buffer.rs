@@ -11,6 +11,10 @@ impl Buffer {
         name.to_string_lossy().to_string()
     }
 
+    pub fn get_contents(&self) -> &Vec<u8> {
+        &self.contents
+    }
+
     pub fn new(path: PathBuf, contents: Vec<u8>) -> Self {
         Self { path, contents }
     }

@@ -3,6 +3,7 @@ mod app;
 mod domain;
 mod error;
 mod menu;
+mod components;
 
 fn main() -> Result<(), eframe::Error> {
     let options = eframe::NativeOptions {

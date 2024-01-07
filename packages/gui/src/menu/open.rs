@@ -7,7 +7,7 @@ pub(crate) fn open_file(ctx: &mut AppContext) {
     if let Some(path) = rfd::FileDialog::new().pick_file() {
         match open_file_internal(path) {
             Ok(buffer) => {
-                ctx.buffers.push(buffer);
+                ctx.add_buffer(buffer);
             },
             Err(_error) => {
                 //TODO: handle error in dialog
